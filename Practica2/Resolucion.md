@@ -114,11 +114,11 @@ Al enviar lo recibido a un archivo y abriendolo con el navegador podemos ver la 
     c) ¿Cuántas cabeceras viajaron en el requerimiento? ¿Y en la respuesta?
 
 **a)** La principal diferencia que podemos ver es que en el primer comando realiza una solicitud con el método GET y en la segunda la solicitud es realizada con el método HEAD. También se puede ver que al redirigir la salida /dev/null, este descarta la salida estándar del comando.
-![salida del comando curl -v -s www.redes.unlp.edu.ar > /dev/null](image.png)
-![salida del comando curl -I -v -s www.redes.unlp.edu.ar](image-1.png)
+![salida del comando curl -v -s www.redes.unlp.edu.ar > /dev/null](imgs/image.png)
+![salida del comando curl -I -v -s www.redes.unlp.edu.ar](imgs/image-1.png)
 
 **b)** Si al primer comando se le saca la redirección devuelve no solo el mensaje de solicitud y de respuesta, si no que también muestra en la consola todo el código HTML utilizado para construir la página web.
-![salida del comando curl -v -s www.redes.unlp.edu.ar](image-2.png)
+![salida del comando curl -v -s www.redes.unlp.edu.ar](imgs/image-2.png)
 
 **c)** En el requerimiento viajaron 3 cabeceras y en la respuesta 7.
 
@@ -149,7 +149,7 @@ En HTTP los codigos de estado de respuesta indican si se ha completado satisfact
 **400-499:** Errores de los clientes
 **500-599:** Errores de los servidores
 
-![Captura de los códigos de estado sacada de la RFC 1945-HTTP](image-3.png)
+![Captura de los códigos de estado sacada de la RFC 1945-HTTP](imgs/image-3.png)
 
 
 ---
@@ -160,7 +160,7 @@ En HTTP los codigos de estado de respuesta indican si se ha completado satisfact
     d) ¿El acceso a la página solicitada fue exitoso o no?
     e) ¿Cuándo fue la última vez que se modificó la página?
     f) Solicite la página nuevamente con curl usando GET, pero esta vez indique que quiere obtenerla sólo si la misma fue modificada en una fecha posterior a la que efectivamente fue modificada. ¿Cómo lo hace? ¿Qué resultado obtuvo? ¿Puede explicar para qué sirve?
-![Captura de pantalla del comando solicitado](image-4.png)
+![Captura de pantalla del comando solicitado](imgs/image-4.png)
 ```
     curl --head www.redes.unlp.edu.ar
 ```
@@ -176,7 +176,7 @@ En este caso la versión de HTTP es 1.1, el código es 200 y el mensaje es "OK".
 **e)** La página fue modificada por última vez el 19 de marzo de 2023 a las 19:04:46 GMT.
 
 **f)** 
-![Captura de pantalla de la VM](image-5.png)
+![Captura de pantalla de la VM](imgs/image-5.png)
 ```
     curl -I -H "If-Modified-Sience: Tue, 26 Mar 2024 19:04:46 GMT" www.redes.unlp.edu.ar
 ```
@@ -184,29 +184,29 @@ El resultado obtenido es 304 "Not Modified", esto significa que la página no vo
 
 El campo "Last-modified-Sience" se utiliza para poder realizar un GET Condicional, el cual permite saber si el archivo se encuentra almacenado en la caché y en su última versión, para así ver si tiene que solicitar nuevamente el objeto o no.
 
-![Explicación segun lo que yo entendí de como funciona la caché](image-6.png)
+![Explicación segun lo que yo entendí de como funciona la caché](imgs/image-6.png)
 
 ---
 14. Utilizando curl, acceda al sitio www.redes.unlp.edu.ar/restringido/index.php y siga las instrucciones y las pistas que vaya recibiendo hasta obtener la respuesta final. Será de utilidad para resolver este ejercicio poder analizar tanto el contenido de cada página como los encabezados.
 
-![Captura 1](image-7.png)
+![Captura 1](imgs/image-7.png)
 ```
    curl -v www.redes.unlp.edu.ar/restringido/index.php 
 ```
-![Captura 2](image-8.png)
+![Captura 2](imgs/image-8.png)
 ```
     curl -v www.redes.unlp.edu.ar/obtener-usuario.php
 ```
-![Captura 3](image-9.png)
+![Captura 3](imgs/image-9.png)
 ```
    curl -v -H "Usuario-Redes:obtener" www.redes.unlp.edu.ar 
 ```
-![Captura 4](image-10.png)
+![Captura 4](imgs/image-10.png)
 ```
     echo "usuario:contraseña" | base64 -> devuelve un string
    curl -v -H "Authorization: Basic string" www.redes.unlp.edu.ar/restringido/index.php 
 ```
-![Captura 5](image-11.png)
+![Captura 5](imgs/image-11.png)
 ```
     curl -v -H "Authorization: Basic string" www.redes.unlp.edu.ar/restringido/the-end.php
 ```
@@ -216,15 +216,15 @@ El campo "Last-modified-Sience" se utiliza para poder realizar un GET Condiciona
     b) Desde la consola ejecute el comando telnet www.redes.unlp.edu.ar 80 y luego pegue el contenido que tiene almacenado en el portapapeles. ¿Qué ocurre luego de hacerlo?
     c) Repita el proceso anterior, pero copiando la salida del recurso /extras/prueba-http-1-1.txt. Verifique que debería poder pegar varias veces el mismo contenido sin tener que ejecutar el comando telnet nuevamente.
 **a)** 
-![alt text](image-12.png)
+![alt text](imgs/image-12.png)
 
 **b)**
-![alt text](image-13.png)
+![alt text](imgs/image-13.png)
 Luego de hacerlo, podemos ver el código HTML correspondiente a la página solicitada y una vez que obtenemos este HTML, la conexión se cierra, debido a que HTML 1.0 no trabaja con una conexión persistente.
 
 **c)**
-![alt text](image-14.png)
-![alt text](image-15.png)
+![alt text](imgs/image-14.png)
+![alt text](imgs/image-15.png)
 En este inciso, realmente pasa que podemos pegar lo copiado varias veces ejecutando una única vez el comando telnet, debido a que en este caso HTTP 1.1 trabaja con una conexión persistente.
 
 ---
@@ -249,7 +249,7 @@ En este inciso, realmente pasa que podemos pegar lo copiado varias veces ejecuta
     - Para borrar la cache del navegador, deberá ir al menú “Herramientas->Borrar historial reciente”. Alternativamente puede utilizar Ctrl+F5 en el navegador para forzar la petición HTTP evitando el uso de caché del navegador.
     - En caso de querer ver de forma simplificada el contenido de una comunicación http, utilice el botón derecho sobre un paquete HTTP perteneciente al flujo capturado y seleccione la opción Follow TCP Stream.
         a) Abra un navegador e ingrese a la URL: www.redes.unlp.edu.ar e ingrese al link en la sección “Capa de Aplicación” llamado “Métodos HTTP”. En la página mostrada se visualizan dos nuevos links llamados: Método GET y Método POST. Ambos muestran un formulario como el siguiente:
-            ![imagen de la práctica](image-16.png)
+            ![imagen de la práctica](imgs/image-16.png)
         b) Analice el código HTML
         c) Utilizando el analizador de paquetes Wireshark capture los paquetes enviados y recibidos al presionar el botón Enviar.
         d) ¿Qué diferencias detectó en los mensajes enviados por el cliente?
@@ -264,7 +264,7 @@ Esto también puede verse en la barra del browser dedicada a la búsqueda (donde
 
 La cabecera Set-Cookie sirve para poder indicar en la misma el número de identificación que le corresponde a un usuario en particular, esto permite que se pueda conocer identificar a un usuario. Las cookies son utilizadas en HTTP ya que HTTP es un protocolo el cual no tiene memoria del estado de la conexión, entonces, al utilizar cookies, se puede de alguna forma seguir el rastro del usuario.
 
-![Funcionamiento de cookies](image-17.png)
+![Funcionamiento de cookies](imgs/image-17.png)
 
 ---
 19. ¿Cuál es la diferencia entre un protocolo binario y uno basado en texto? ¿De qué tipo de protocolo se trata HTTP/1.0, HTTP/1.1 y HTTP/2?
