@@ -291,3 +291,8 @@ En el caso de HTTP 1.0 y 1.1 son protocolos de texto y HTTP 2.0 es un protocolo 
     :scheme: https
     :authority: www.info.unlp.edu.ar
 ```
+
+# EJERCICIO DE PARCIAL
+
+![Captura del ejecicio de parcial](imgs/captura_parcial.png)
+
