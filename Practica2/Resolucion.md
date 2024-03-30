@@ -296,7 +296,7 @@ En el caso de HTTP 1.0 y 1.1 son protocolos de texto y HTTP 2.0 es un protocolo 
 
 ![Captura del ejecicio de parcial](imgs/captura_parcial.png)
 
-<span style="color=red">PREGUNTAR TODAS LAS RESPUESTAS</span>
+<span style="color:red">PREGUNTAR TODAS LAS RESPUESTAS</span>
 
 a) ¿Qué versión de HTTP podría estar utilizando el servidor?
 
