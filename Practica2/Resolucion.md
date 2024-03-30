@@ -296,3 +296,37 @@ En el caso de HTTP 1.0 y 1.1 son protocolos de texto y HTTP 2.0 es un protocolo 
 
 ![Captura del ejecicio de parcial](imgs/captura_parcial.png)
 
+<span style="color=red">PREGUNTAR TODAS LAS RESPUESTAS</span>
+
+a) ¿Qué versión de HTTP podría estar utilizando el servidor?
+
+El servidor podría estar utilizando HTTP 1.1 porque permite en el caso de que se desee trabajar con una conexión persistente.
+
+---
+b) ¿Qué método está utilizando? Dicho método, ¿retorna el recurso completo solicitado?
+
+En la solicitud se está utilizando el método HEAD, el cual retorna solamente la cabecera del recurso solicitado.
+
+---
+c) ¿Cuál es el recurso solicitado?
+
+El recurso solicitado es la página métodos.
+
+---
+d) ¿El método funcionó correctamente?
+
+Si, funcionó correctamente, debido a que el código de estado es un 200.
+
+---
+e) Si la solicitud hubiera llevado un encabezado que diga: *If-Modified-Since: Sat, 20 Jan 2018 13:02:41 GMT* ¿Cuál habría sido la respuesta del servidor web? ¿Qué habría hecho el navegador en este caso?
+
+En caso de que la página estuviese cacheada, servidor hubiese respondido solamente con las cabeceras del método, sin devolver ningun objeto.
+
+---
+
+
+
+
+
+
+
