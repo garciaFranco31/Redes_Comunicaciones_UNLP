@@ -4,39 +4,63 @@
 
 1. Investigue y describa cómo funciona el DNS. ¿Cuál es su objetivo?
 
+DNS es un sistema distribuido de forma jerárquica,conformado por muchos servidores al rededor del mundo.
+El objetivo principal del DNS es traducir nombres de dominio a direcciones IP, permitiendo lograr una abstracción de las direcciones de red utilizadas internamente por los protocolos.
+
+Cuando un cliente DNS recibe un nombre de host, lo pasa a su servidor DNS, el cual es el encargado de devolverle al cliente DNS la dirección IP correspondiente al nombre del host solicitado. Una vez que el navegador, recibe la dirección IP del servidor DNS, puede iniciar una conexión TCP.
 
 ---
 2. ¿Qué es un root server? ¿Qué es un generic top-level domain (gtld)?
 
+**gTLD (Generic Top-Level Domain):** son aquellos que contienen dominios con propósitos particulares.
+
+**Root Server:** son aquellos encargados de atender la raíz del servicio y se encargan de delegar cada una de las zonas generadas para los TLD (gTLD y ccTLD). Lqa delegación consiste en saber las direcciones IP correspondientes a los servidores que se encargan de resolver las zonas de manera autoritativa.
+
+*Servidor autoritativo: tiene toda la información para una zona, por lo cual puede producir cambios sobre la misma y tiene siempre la última versión.*
+
 ---
 3. ¿Qué es una respuesta del tipo autoritativa?
+
+Una *respuesta autoritativa* se produce cuando un *servidor autoritativo* recibe una consulta de un nombre sobre el cual tiene autoridad y la responde desde su base de datos de nombres.
 
 ---
 4. ¿Qué diferencia una consulta DNS recursiva de una iterativa?
 
+**Consulta recursiva:** es aquella donde el servidor DNS debe ponerse en contacto con otros servidores DNS (los que sean necesarios para resolver la solicitud)
+
+**Consulta iterativa:**es aquella en la que se espera que el servidor DNS responda con la información local que tiene almacenada de lo que conoce de la zona local o de la caché.
+
 ---
 5. ¿Qué es el resolver?
 
+El resolver es un agente encargado de resolver los nombres a solicitud del cliente, el cual generalmente no se implementa como un servicio activo, si no, más bien como un conjunto de rutinas encapsuladas en una biblioteca de funciones.
+
 ---
 6. Describa para qué se utilizan los siguientes tipos de registros de DNS:
-    a. A 
-    b. MX 
-    c. PTR 
-    d. AAAA 
-    e. SRV
-    f. NS
-    g. CNAME
-    h. SOA
-    i. TXT
+    a. **A (Address):** son registros que mapean de nombre de dominio a una dirección IP (IPv4). Pueden existir varios registros A con el mismo nombre:
+    b. **MX (Mail Exchanger):** indican para un nombre de dominio, cuáles son los servidores de mail encargados de recibir los mensajes para ese dominio.
+    c. **PTR (Pointer):** son registros que mapean direcciones IP a nombres de dominio (al contario que los registros A).
+    d. **AAAA:** igual que el registro A, es decir, se encargan de mapear el nombre de dominio a una dirección IP, pero en este caso, en su versión v6 (IPv6)
+    e. **SRV (Service):**un registro de servicio, especifica un servidor y un puerto para servicios específicos (ej. mensajería instantanea).
+    f. **NS (Name Server):** indican los servidores de nombre autoritativos para una zona o sub-domunio.
+    g. **CNAME (Canonical Name):** también conocidos como aliases, se encargan de mapear un nombre de dominio a otros nombres al nombre original (nombre canónico).
+    h. **SOA (Start of Authority):**se crean por cada zona o sub-zona que brinda el servicio de DNS, en ellos se especifican los parámetros globales para todos los registros del dominio o zona.
+    i. **TXT (Textual):** mapena un nombre de dominio a información extra asociada con el equipo que tiene dicho nombre.
 
 ---
 7. En Internet, un dominio suele tener más de un servidor DNS, ¿por qué cree que esto es así?
 
+Esto es para poder responder las solicitudes de la forma más rápida posible y no colapsar en caso de que le lleguen demasiadas solicitudes al mismo tiempo, ya que esto les permite redirigir el tráfico.
+
 ---
 8. Cuando un dominio cuenta con más de un servidor, uno de ellos es el primario (o maestro) y todos los demás son secundarios (o esclavos). ¿Cuál es la razón de que sea así?
 
+Esto es así debido a que hace que sea más fácil actualizar el servidor en caso de que se requiera porque solamente debemos actualizar el servidor primerio y luego los servidores secundarios obtendrán una copia de la base de datos del servidor primario.
+
 ---
 9. Explique brevemente en qué consiste el mecanismo de transferencia de zona y cuál es su finalidad.
+
+El mecanismo de transferencia de zona se da cuando un servidor primario fue actualizado y da la señal para que los servidores secundarios re-copian la base de datos desde el servidor maestro. Esta comunicación entre los servidores se realiza sobre TPC vía el mismo protolo DNS.
 
 ---
 10. Imagine que usted es el administrador del dominio de DNS de la UNLP (unlp.edu.ar). A su vez, cada facultad de la UNLP cuenta con un administrador que gestiona su propio dominio (por ejemplo, en el caso de la Facultad de Informática se trata de info.unlp.edu.ar).
