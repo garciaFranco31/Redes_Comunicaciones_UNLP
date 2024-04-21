@@ -45,19 +45,19 @@ A diferencia de POP3, IMAP mantiene información del estado a lo largo de las se
         ii. Utilice el filtro SMTP para observar los paquetes del protocolo SMTP en la captura generada y analice el intercambio de dicho protocolo entre el cliente y el servidor para observar los distintos comandos utilizados y su correspondiente respuesta. 
         *Ayuda: filtre por protocolo SMTP y sobre alguna de las líneas del intercambio haga click derecho y seleccione Follow TCP Stream. . .*
 
-    ![captura de wireshark pop a imap](image-1.png)
-    ![captura de follow TCP stream mensaje de pop a imap](image.png)
-    ![captura de wireshark de la respuesta imap a pop](image-2.png)
-    ![captura follow TCP stream respuesta imap a pop](image-3.png)
+    ![captura de wireshark pop a imap](imgs/image-1.png)
+    ![captura de follow TCP stream mensaje de pop a imap](imgs/image.png)
+    ![captura de wireshark de la respuesta imap a pop](imgs/image-2.png)
+    ![captura follow TCP stream respuesta imap a pop](imgs/image-3.png)
 
     ---
     c) Usando el cliente de correo Thunderbird del usuario alumnopop@redes.unlp.edu.ar envíe un correo electrónico alumnoimap@redes.unlp.edu.ar el cual debe tener: un asunto, datos en el body y una imagen adjunta.
         i. Verifique las fuentes del correo recibido para entender cómo se utiliza el header “Content-Type: multipart/mixed“ para poder realizar el envío de distintos archivos adjuntos.
         ii. Extraiga la imagen adjunta del mismo modo que lo hace el cliente de correo a partir de los fuentes del mensaje.
 
-    ![captura wireshark pop a imap con imagen](image-4.png)
-    ![captura follow tcp stream pop a imap con imagen 1](image-5.png)
-    ![captura follow tcp stream pop a imap con imagen 2](image-6.png)
+    ![captura wireshark pop a imap con imagen](imgs/image-4.png)
+    ![captura follow tcp stream pop a imap con imagen 1](imgs/image-5.png)
+    ![captura follow tcp stream pop a imap con imagen 2](imgs/image-6.png)
 
     Para extraer la imagen utilizar el comano base64 -d nfr > imagen
 
@@ -66,19 +66,19 @@ A diferencia de POP3, IMAP mantiene información del estado a lo largo de las se
     a) Utilizando Wireshark, capture el tráfico de red contra el servidor de correo mientras desde la cuenta alumnoimap@redes.unlp.edu.ar le envía una correo a alumnopop@redes.unlp.edu.ar y mientras alumnopop@redes.unlp.edu.ar recepciona dicho correo.
     b) Utilice el filtro POP para observar los paquetes del protocolo POP en la captura generada y analice el intercambio de dicho protocolo entre el cliente y el servidor para observar los distintos comandos utilizados y su correspondiente respuesta.
 
-![captura wireshark de imap a pop](image-7.png)
-![captura follow tcp stream imap a pop 1](image-8.png)
-![captura follow tcp stream imap a pop 2](image-9.png)
+![captura wireshark de imap a pop](imgs/image-7.png)
+![captura follow tcp stream imap a pop 1](imgs/image-8.png)
+![captura follow tcp stream imap a pop 2](imgs/image-9.png)
 
 ---
 5. Análisis del protocolo IMAP
     a) Utilizando Wireshark, capture el tráfico de red contra el servidor de correo mientras desde la cuenta alumnopop@redes.unlp.edu.ar le envía un correo a alumnoimap@redes.unlp.edu.ar y mientras alumnoimap@redes.unlp.edu.ar recepciona dicho correo.
     b) Utilice el filtro IMAP para observar los paquetes del protocolo IMAP en la captura generada y analice el intercambio de dicho protocolo entre el cliente y el servidor para observar los distintos comandos utilizados y su correspondiente respuesta.
 
-![captura de wireshark de pop a imap](image-10.png)
-![captura follow tcp stream filtro imap 1](image-11.png)
-![captura follow tcp stream filtro imap 2](image-12.png)
-![captura follow tcp stream filtro imap 3](image-13.png)
+![captura de wireshark de pop a imap](imgs/image-10.png)
+![captura follow tcp stream filtro imap 1](imgs/image-11.png)
+![captura follow tcp stream filtro imap 2](imgs/image-12.png)
+![captura follow tcp stream filtro imap 3](imgs/image-13.png)
 
 ---
 6. IMAP vs POP
@@ -228,10 +228,10 @@ Es posible, pero en caso de que se haga, se le debe avisar a todos los MTA del d
     a) Analice tanto la salida del comando swaks como los fuentes del mensaje recibido para responder las siguientes preguntas:
         i. ¿A qué corresponde la información enviada por el servidor destino como respuesta al comando EHLO? Elija dos de las opciones del listado e investigue la funcionalidad de la misma.
 
-    ![prueba swaks 1](image-14.png)
-    ![prueba swaks 2](image-15.png)
-    ![pruab swaks 3](image-16.png)
-    ![correo enviado con swaks visto desde thunderbird](image-17.png)
+    ![prueba swaks 1](imgs/image-14.png)
+    ![prueba swaks 2](imgs/image-15.png)
+    ![pruab swaks 3](imgs/image-16.png)
+    ![correo enviado con swaks visto desde thunderbird](imgs/image-17.png)
 
     **STARTTLS:** indica que emplea cifrado TLS para cifrar las comunicaciones, esto se debe a que SMTP se comunica en texto plano.
     **VRFY:** pregunta al servidor si un correo está disponible o registrado en el servidor.
@@ -257,14 +257,14 @@ Es posible, pero en caso de que se haga, se le debe avisar a todos los MTA del d
 
     c) Realice una consulta de DNS por registros TXT al dominio info.unlp.edu.ar y entre dichos registros evalúe la información del registro SPF. ¿Por qué cree que aparecen muchos servidores autorizados?
 
-    ![salida del comando dig -t TXT info.unlp.edu.ar](image-18.png)
+    ![salida del comando dig -t TXT info.unlp.edu.ar](imgs/image-18.png)
 
     El registro SPF determina qué servidores de correo y dominios tienen permitido enviar mails en nombre de un dominio. Estos servidores autorizados aparecen porque son los distintos servidores y dominios de la facultad de informática.
     El "a:" se utiliza para autorizar servidores por nombres de host.
 
     d) Realice una consulta de DNS por registros TXT al dominio outlook.com y analice el registro correspondiente a SPF. ¿Cuáles son los bloques de red autorizados para enviar mails?. Investigue para qué se utiliza la directiva "~all"
 
-    ![salida del comando dig -t txt outlook.com](image-19.png)
+    ![salida del comando dig -t txt outlook.com](imgs/image-19.png)
 
     Los bloques son:
     - a.outlook.com
