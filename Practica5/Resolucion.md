@@ -44,7 +44,7 @@ Los puertos actúan como puntos finales en una comunicación y permiten que múl
     e. Utilización de puertos: TCP establece una conexión punto a punto entre (únicamente) dos dispositivos. Utiliza números de puerto para identificar aplicaciones específicas. UDP permite que muchos clientes/procesos envíen datos por el mismo socket y al igual que TCP utiliza números de puerto para identificar aplicaciones específicas.
 
 ---
-1. La PDU de la capa de transporte es el segmento. Sin embargo, en algunos contextos suele utilizarse el término datagrama. Indique cuando.
+5. La PDU de la capa de transporte es el segmento. Sin embargo, en algunos contextos suele utilizarse el término datagrama. Indique cuando.
 
 ---
 6. Describa el saludo de tres vías de TCP. ¿UDP tiene esta característica?
