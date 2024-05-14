@@ -2,22 +2,49 @@
 
 1. ¿Cuál es la función de la capa de transporte?
 
+La capa de transporte es la encargada de proporcionar directamente servicios de comunicación a los procesos de aplicación que se ejecutan en hosts diferentes.
+Cada protocolo de la capa de transporte proporciona una *Comunicación lógica (hace ver como que los hosts que se comunican están conectados directamente)* entre procesos de aplicación que se ejecutan en hosts diferentes.
+
 ---
 2. Describa la estructura del segmento TCP y UDP.
+    ![Estructura del segmento TCP](imgs/segmentoTCP.png)
+    
+    <!-- TODO completar -->
 
+
+    ![Estructura del segmento UDP](imgs/segmentoUDP.png)
+
+* Los datos de la aplicación ocupan el campo de datos del segmento UDP.
+* La cabecera UDP solo tiene cuatro campos, y cada uno de ellos tiene una longitud de dos bytes.
+* Los números de puerto permiten al host de destino pasar datos de la aplicación al proceso apropiado que está ejecutándose en el sistema terminal de destino.
+* El campo de longitud especifíca el número de bytes del segmento UDP (la cabecera más los datos).
+* El host receptor utiliza la suma de comprobación para detectar si se han introducido errores en el segmento.
+  
 ---
 3. ¿Cuál es el objetivo del uso de puertos en el modelo TCP/IP?
 
----
-4. Compare TCP y UDP en cuanto a:
-    a. Confiabilidad
-    b. Multiplexación.
-    c. Orientado a la conexión.
-    d. Controles de congestión.
-    e. Utilización de puertos.
+Los puertos se utilizan para distinguir las aplicaciones y los protocolos que están enviando/recibiendo datos.
+Los puertos actúan como puntos finales en una comunicación y permiten que múltiples aplicaciones en una misma computadora/dispositivo se comuniquen simultáneamente a través de la red.
 
 ---
-5. La PDU de la capa de transporte es el segmento. Sin embargo, en algunos contextos suele utilizarse el término datagrama. Indique cuando.
+4. Compare TCP y UDP en cuanto a:
+    a. Confiabilidad: TCP es un modelo confiable debido a que garantiza que los datos se entregue en el orden correcto y sin errores. En cambio, UDP es menos confiable debido a que no garantiza ni la entrega de los datos, ni que los mismos se entreguen en orden.
+    
+    ---
+    b. Multiplexación: En el caso de TCP, la multiplexación y demultiplexación es orientada a la conexión, cuando llega de la procedente de la red a un host un segmento TCP, el host emplea los valores de IP orígen, número de puerto de orígen, IP destino y número de puerto de destino para demultiplexar el segmento al socket apropiado.
+    En el caso de UDP la multiplexación y demultiplexación no es orientada a la conexión. El socket UDP queda identificado por la dirección IP destino y un número de puerto de destino, por lo tanto si dos segmentos UDPP con diferentes direcciones IP y puertos de orígen distintos, tienen el mismo puerto destino y la misma dirección IP destino, entonces el segmento se envía al mismo proceso de destino por medio  del mismo socket.
+
+    ---
+    c. Orientado a la conexión: TCP establece una conexión antes de iniciar con la transmisión de los datos, para así asegurarse que ambas partes estén sincronizadas hablando de secuencia de datos y control de flujo. En el caso de UDP no se necesita una conexión para poder iniciar/finalizar una transferencia de datos.
+    
+    ---
+    d. Controles de congestión: TCP proporciona mecanismos de control de congestión, para así evitar que cualquier conexión TCP sature con una cantidad de tráfico considerable los enlaces y routers existentes entre los hosts. UDP no tiene su tráfico regulado, or lo tanto una aplicación que emplee el protocolo de transporte UDP puede enviar los datos que quiera a la velocidad que quiera, durante todo el tiempo que quiera.
+    
+    ---
+    e. Utilización de puertos: TCP establece una conexión punto a punto entre (únicamente) dos dispositivos. Utiliza números de puerto para identificar aplicaciones específicas. UDP permite que muchos clientes/procesos envíen datos por el mismo socket y al igual que TCP utiliza números de puerto para identificar aplicaciones específicas.
+
+---
+1. La PDU de la capa de transporte es el segmento. Sin embargo, en algunos contextos suele utilizarse el término datagrama. Indique cuando.
 
 ---
 6. Describa el saludo de tres vías de TCP. ¿UDP tiene esta característica?
