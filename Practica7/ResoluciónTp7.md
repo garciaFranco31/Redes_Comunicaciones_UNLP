@@ -193,8 +193,9 @@ Permite reducir el tamaño de la tabla de rutas, haciendo que el sistema sea má
 
 198.10.0.0/22
 11111111.11111111.11111111.00000000 => máscara original /24
-11111111.11111111.11111100.00000000 => máscara CIDR /22
+11111111.11111111.11111100.00000000 => máscara CIDR /22 
 
+Podemos ver que esta nueva red 198.10.0.0/22 contienen a todas las redes mencionadas anteriormente.
 
 ---
 12. Listar las redes involucradas en los siguientes bloques CIDR:
@@ -202,21 +203,169 @@ Permite reducir el tamaño de la tabla de rutas, haciendo que el sistema sea má
     * 195.24.0.0/13
     * 195.24/13
 
+**200.56.168.0/21**
+
+Red de clase C, su máscara por default es /24
+
+11001000.00111000.10101000.00000000 => 200.56.168.0
+11111111.11111111.11111111.00000000 => 255.255.255.0 mask clase C
+11111111.11111111.11111000.00000000 => 255.255.248.0 mask CIDR
+
+Para poder saber hasta que red se involucra, lo que debemos hacer, es a esos (en este caso 3 bits) de la máscara CIDR, modificarlos a su valor máximo (todos 1):
+
+11001000.00111000.10101000.00000000 => 200.56.168.0/24
+11001000.00111000.10101111.00000000 => 200.56.175.0/24
+
+
+**195.24.0.0/13**
+
+Red de clase C, máscara por default /24
+
+11000011.00011000.00000000.00000000 => 195.24.0.0
+11111111.11111111.11111111.00000000 => 255.255.255.0 mask clase C
+11111111.11111000.00000000.00000000 => 255.248.0.0 mas CIDR
+
+Para poder saber hasta que red se involucra, lo que debemos hacer, es a esos (en este caso 11 bits) de la máscara CIDR, modificarlos a su valor máximo (todos 1):
+
+11000011.00011000.00000000.00000000 => 195.24.0.0/24
+11000011.00011111.11111111.00000000 => 195.31.255.0/24
+
+
+**195.24/13**
+
+Es igual que el caso de la red **195.24.0.0/13**, esto se debe a que cuando no tiene ningún número que represente a los dos octetos faltantes, es porque el mismo tiene el valor 0.
+
 ---
 13. El bloque CIDR 128.0.0.0/2 o 128/2, ¿Equivale a listar todas las direcciones de red de clase B? ¿Cuál sería el bloque CIDR que agrupa todas las redes de clase A?
+
+10000000.00000000.00000000.00000000 => 128.0.0.0
+11111111.11111111.00000000.00000000 => 255.255.0.0 mask clase B
+11000000.00000000.00000000.00000000 => 192.0.0.0 mask CIDR
+
+Para poder saber hasta que red se involucra, lo que debemos hacer, es a esos (en este caso 14 bits) de la máscara CIDR, modificarlos a su valor máximo (todos 1):
+
+10111111.11111111.00000000.00000000 => 191.255.0.0/16
+
+
+Bloque para todas las redes de clase A
+
+00000000.00000000.00000000.00000000 => 0.0.0.0
+11111111.00000000.00000000.00000000 => 255.0.0.0 mask Clase A
+10000000.00000000.00000000.00000000 => 128.0.0.0 mask CIDR
+
+01111111.11111111.11111111.11111111 => 127.255.255.255/8
+
+Por lo tanto, el bloque CIDR que representa a todas las redes de clase A es: 0.0.0.0/1
+
+---
 
 ## VLSM
 
 14. ¿Qué es y para qué se usa VLSM?
+
+VLSM (Variable Legth Subnet Mask): es una técnica que permite asignar direcciones IP de manera eficiente dividiendo una red en subredes más pequeñas de diferentes tamaños, permitiendo usar más de una máscara de subred dentro de una misma red o subred, esto hace que las subredes creadas tengan diferentes tamaños y estén adaptadas específicamente a la cantidad de hosts necesarios para cada subred.
+
+---
 15. Describa, con sus palabras, el mecanismo para dividir subredes utilizando VLSM.
-16. Suponga que trabaja en una organización que tiene la red que se ve en el gráfico y debe armar el direccionamiento para la misma, minimizando el desperdicio de direcciones IP. Dicha organización posee la red 205.10.192.0/19, que es la que usted deberá utilizar.
-    <!-- * INSERTAR IMAGEN -->
+
+Para poder dividir subredes utilizando VLSM debemos:
+* Tomar el segmento que más hosts requiere y realizar el subneting para él.
+* De las subredes obtenidas, asignar todas las que se puedan con el menor desperdicio posible.
+* Si quedan segmentos de red sin una subred asginada, volver al primer.
+**Copy paste de la teoría**
+
+Básicamente con mis propias palabras, se agarra el segmento que necesita más hosts, hacemos la subdivisión de redes. Una vez que tenemos las subredes, intentamos asignarlas a todas o al menos las que se puedan para no andar teniendo subredes al dope. En caso de que quede algún semgneto sin subred porque hicimos muy pocas, tenemos que volver a tomar el segmento que más hosts requiere y hacer toda la bola de nuevo, hasta que todos los segmentos tengan una subred asignada.
+
+---
+16.  Suponga que trabaja en una organización que tiene la red que se ve en el gráfico y debe armar el direccionamiento para la misma, minimizando el desperdicio de direcciones IP. Dicha organización posee la red 205.10.192.0/19, que es la que usted deberá utilizar.
+
     ![alt text](/Practica7/imgs/ejercicio16.png)
     a. ¿Es posible asignar las subredes correspondientes a la topología utilizando subnetting sin VLSM? Indique la cantidad de hosts que se desperdicia en cada subred.
     b. Asigne direcciones a todas las redes de la topología. Tome siempre en cada paso la primera dirección de red posible.
     c. Para mantener el orden y el inventario de direcciones disponibles, haga un listado de todas las direcciones libres que le quedaron, agrupándolas utilizando CIDR.
     d. Asigne direcciones IP a todas las interfaces de la topología que sea posible.
-17. Utilizando la siguiente topología y el bloque asignado, arme el plan de direccionamiento IPv4 teniendo en cuenta las siguientes restricciones:
+
+a) Debido a que se tienen 4 redes (Red A, Red B, Red C y Red D) y que además se neceita comunicar con los routers los cuales son 2, necesito en total 6 subredes, con lo cual, debo utilizar 3 bits más de los que quedaban para host.
+
+11111111.11111111.111<span style="color:red">000</span>00.00000000 => 255.255.224.0 mask de red /19
+
+*Nota: los bits que están en color rojo, son los que se utilizaran para hacer las 6 subredes*
+Utilizo 3 bits, ya que como tengo que hacer 6 subredes, 2^3=8.
+
+11111111.11111111.111<span style="color:red">111</span>00.00000000 => 255.255.224.0 mask de subred /22
+
+Ahora bien, tengo a la Red C que necesita un total de 1530 hosts, para los cuales necesitaría tomar en total 11 bits con los cuales podría hacer hasta 2048 hosts, pero no me alcanzan los bits sobrantes, es por esto, que no puede hacerse.
+
+b) Tenemos la red 205.10.192.0/19 
+11001101.00001010.11000000.00000000 => 205.10.192.0
+11111111.11111111.11100000.00000000 => Mask de red /19
+
+* Vamos a asignar IP a red C:
+Red C necesita 1530 hosts, por lo tanto vamos a necesitar tener 11 bits para host, ya que esto nos permite tener hasta 2048 (2^11 = 2048) hosts. Para lograr esto, debemos modificar la máscara de red y obtener una nueva máscara para esta subred. Tenemos que dejar en 0 únicamente los bits que serán utilizados para host, el resto de los bits (los cuales serán utilizados para subredes) deben tener el valor 1, por lo tanto, la nueva máscara de subred nos quedará:
+
+1111111.1111111.111<strong style="color:blue">11</strong><span style="color:red">000.0000000</span> => Nueva Mask de subred /21
+*En rojo están los bits que serán utilizados para host y en azul, aquellos bits que ganamos para hacer subredes*
+Por lo tanto, ahora debemos modificar nuestra dirección IP original en los 2 bits que ganamos luego de hacer la actualización de la máscara:
+
+11001101.00001010.110<span style="color:blue">00</span>000.0000000 => Red C 205.10.200.0/21
+11001101.00001010.110<strong style="color:blue">01</strong>000.00000000 => red libre que utilizaremos para seguir dividiendo
+
+* Vamos a asignar IP a red A:
+Red A necesita 128 hosts, por lo tanto, vamos a necesitar 8 bits para hosts, los cuales nos permiten tener hasta 256 hosts (2^8=256). Para poder lograr esto, ahora debemos modificar la máscara de subred obtenida anteriormente (la que obtuvimos para la red C), en la cual ahora, nos deben quedar solamente 8 bits en 0:
+
+1111111.1111111.1111000.0000000 => Mask de subred anterior /21
+1111111.1111111.11111<strong style="color:blue">111</strong><span style="color:red">.0000000</span> => Nueva Mask de subred /24
+*En rojo están los bits que serán utilizados para host y en azul, aquellos bits que ganamos para hacer subredes*
+En este caso, vemos que ganamos 3 bits para poder hacer subredes (combinaciones obtenidas: 000,001,010,011,100,101,110,111), ahora hacemos la actualización:
+
+11001101.00001010.11001<strong sytle="color:blue">000</strong>.0000000 => Red A 205.10.200.0/24
+11001101.00001010.11001<strong sytle="color:blue">001</strong>.0000000 => 205.10.201.0/24 red libre que utilizaremos para seguir dividiendo
+
+
+* Vamos a asignar IP a red B:
+Red B necesita 20 hosts, por lo tanto, vamos a necesitar 5 bits para hosts, los cuales nos permiten tener hasta 32 hosts (2^5=32). Para poder lograr esto, modificamos la máscara de subred obtenida para la red A, y ahora nos deben quedar únicamente 5 bits en 0:
+
+11111111.11111111.11111111.<strong style="color:blue">111</strong><strong style="color:red">00000</strong> => /27
+*En rojo están los bits que serán utilizados para host y en azul, aquellos bits que ganamos para hacer subredes*
+En este caso, podemos ver que igual que nos pasó para la red A, ganamos 3 bits para hacer subredes, ahora hacemos la actualización:
+
+11001101.00001010.11001001.<strong style="color:blue">000</strong>00000 => Red B 205.10.201.0/27
+11001101.00001010.11001001.<strong style="color:blue">001</strong>00000 => 205.10.201.32/27 red libre que utilizaremos para seguir dividiendo
+
+* Vamos a asignar IP a red D:
+Para la Red D, la cual necesita 7 hosts, vamos a necesitar 3 bits para host, los cuales nos permiten tener hasta 8 hosts (2^3=8). Modificamos la máscara de subred obtenida de la red B y nos deben quedar únicamente 3 bits en 0:
+
+11111111.11111111.11111111.111<strong style="color:blue">11</strong><strong style="color:red">000</strong> => /29
+*En rojo están los bits que serán utilizados para host y en azul, aquellos bits que ganamos para hacer subredes*
+Podemos ver que al igual que nos pasó para la Red C, ganamos 2 bita para hacer subredes (combinaciones: 00,01,10,11), hacemos la actualización: 
+
+11001101.00001010.11001001.000<strong style="color:blue">00</strong>000 => Red D 205.10.201.0/29
+
+* Red E (red punto a punto)
+Necesita 4 hosts, por lo tanto utilizamos 2 bits, los cuales generarían un total de 4 hosts (2^2=4).
+
+11001101.00001010.11001001.00001000 => 205.10.201.8/29
+11111111.11111111.11111111.11111000 => Máscara de subred anteriord /29
+11111111.11111111.11111111.11111100 => Máscara de subred nueva /30
+
+11001101.00001010.11001001.00001<strong>0</strong>00 => 205.10.201.8/30 Red E
+11001101.00001010.11001001.00001<strong>1</strong>00 => 205.10.201.12/30 red para subdividir
+
+Como me queda un segmento sin IP, lo que hago es dividir nuevamente la red que me quedó disponible en la asignación de Red E:
+
+11001101.00001010.11001001.00001100 => 205.10.201.12/30
+11111111.11111111.11111111.11111100 => Máscara de subred anterior /30
+11111111.11111111.11111111.11111110 => Máscara de subred nueva /31
+
+11001101.00001010.11001001.00001100 => 205.10.102.12/31
+11001101.00001010.11001001.00001110 => 205.10.102.14/31
+
+![direcciones IP asignadas en el gráfico](image-6.png)
+
+<!-- ! Inciso C) CONSULTAR SOBRE CIDR -->
+
+---
+17.  Utilizando la siguiente topología y el bloque asignado, arme el plan de direccionamiento IPv4 teniendo en cuenta las siguientes restricciones:
     <!-- * INSERTAR IMAGEN -->
     ![alt text](/Practica7/imgs/ejercicio17.png)
     a. Utilizar el bloque IPv4 200.100.8.0/22.
@@ -225,8 +374,73 @@ Permite reducir el tamaño de la tabla de rutas, haciendo que el sistema sea má
     d. La red B cuenta con 60 hosts
     e. La red Y tiene 46 hosts y se espera un crecimiento máximo de 18 hosts.
     f. En cada red, se debe desperdiciar la menor cantidad de direcciones IP posibles. En este sentido, las redes utilizadas para conectar los routers deberán utilizar segmentos de red /30 de modo de desperdiciar la menor cantidad posible de direcciones IP.
+
+Partimos del bloque 200.100.8.0/22 => 11001000.01100100.00001000.00000000
+b) Para la red A, la cual necesita un total de 145 hosts (125+20), se necesitarán en total 8 bits para hosts (2^8=256), por lo tando, debemos modificar la máscara:
+
+11111111.11111111.11111100.0000000 => mask /22
+11111111.11111111.111111<strong style="color:red">11</strong>.0000000 => nueva mask /24
+Ganamos 2 bits para hacer subredes, los mismos se encuentran marcados en rojo.
+
+11001000.01100100.000010<strong style="color:blue">00</strong>.00000000 => Red A 200.100.8.0/24
+11001000.01100100.000010<strong style="color:blue">01</strong>.0000000 => 200.100.9.0/24 red disponible para seguir dividiendo
+11001000.01100100.000010<strong style="color:blue">10</strong>.0000000 => 200.100.10.0/24 red disponible para seguir dividiendo
+
+c y e) Para la red X se necesitan 63 hosts y para la red Y se necesitan 64 hosts (46+18), por lo tanto vamos a necesitar 7 bits para hosts (2^7=128), por lo tanto tenemos:
+
+Partimos de una de las redes disponibles para dividir que obtuvimos en A:
+11001000.01100100.000010<strong style="color:blue">01</strong>.0000000 => 200.100.9.0/24
+
+Modificamos la máscara para que nos queden únicamente 7 bits en 0, son los que se van a utilizar para hosts:
+1111111.11111111.11111111.<strong style="color:blue">1</strong><strong style="color:red">0000000</strong> => Nueva mask /25
+*En azul está el bit que ganamos para hacer subredes y en rojo los bits que se utilizarán para host*
+
+11001000.01100100.00001001.00000000 => 200.100.9.0/25 Red X
+11001000.01100100.00001001.10000000 => 200.100.9.128/25 Red Y
+
+No me quedan redes para seguir subdividiendo.
+
+d) Para la red B necesitamos 60 hosts, con lo cual necesitaremos 6 bit para hosts (2^6=64):
+
+Partimos de otra de las redes disponibles para dividir que obtuvimos en A, ya que en el inciso anterior, no nos quedaron redes disponibles para dividir:
+11001000.01100100.000010<strong style="color:blue">10</strong>.0000000 => 200.100.10.0/24
+
+Modificamos la máscara para que nos queden únicamente 6 bits en 0:
+11111111.11111111.11111111.<strong style="color:blue">11</strong><strong style="color:red">000000</strong> => Nueva mask /26
+*En azul están los bits que ganamos para hacer subredes y en rojo los bits que se utilizarán para host*
+
+11001000.01100100.00001010.00000000 => 200.100.10.0/26 Red B
+
+11001000.01100100.00001010.01000000 => 200.100.10.64/26 => red disponible para seguir siendo dividia
+11001000.01100100.00001010.10000000 => 200.100.10.128/26
+11001000.01100100.00001010.11000000 => 200.100.10.192/26
+
+f) Ahora tenemos que generar las direcciones IP para conectar los routers, como nos indica en el enunciado, debemos utilizar /30 para desperdiciar la menor cantidad de hosts posbiles, esto se debe a que necesita únicamente 4 hosts, los cuales los podemos obtener con solamente 2 bits (2^2=4):
+
+Partimos de una de las redes disponibles para dividir que obtuvimos en Red B:
+11001000.01100100.00001010.01000000 => 200.100.10.64/26
+
+Modificamos la máscara para que nos quede /30:
+11111111.11111111.11111111.11<strong style="color:blue">1111</strong><strong style="color:red">00</strong>
+*En azul están los bits que ganamos para hacer subredes y en rojo los bits que se utilizarán para host*
+
+11001000.01100100.00001010.01 0000 00 => N1-N2 200.100.10.64/30
+11001000.01100100.00001010.01 0001 00 => N2-N4 200.100.10.68/30
+11001000.01100100.00001010.01 0010 00 => N4-N3 200.100.10.72/30
+11001000.01100100.00001010.01 0011 00 => N3-N1 200.100.10.76/30
+11001000.01100100.00001010.01 0100 00 => N1-N4 200.100.10.80/30
+
+Redes disponible para seguir dividiendo:
+11001000.01100100.00001010.01 0101 00 => 200.100.10.84/30
+11001000.01100100.00001010.01 0110 00 => 200.100.10.88/30
+11001000.01100100.00001010.01 0111 00 => 200.100.10.92/30
+
+---
 18. Asigne direcciones IP en los equipos de la topología según el plan anterior.
 
+![Direcciones IP obtenidas asignadas en la topología](image-7.png)
+
+---
 ## ICMP y Configuraciones IP
 19. Describa qué es y para qué sirve el protocolo ICMP.
     a. Analice cómo funciona el comando ping.
@@ -237,9 +451,41 @@ Permite reducir el tamaño de la tabla de rutas, haciendo que el sistema sea má
         i. Cómo hacer para que no muestre el nombre del dominio asociado a la IP de cada salto.
         ii. La razón de la aparición de * en parte o toda la respuesta de un salto.
     d. Verifique el recorrido hacia los servidores de nombre del dominio unlp.edu.ar. En base al recorrido realizado, ¿podría confirmar cuál de ellos toma un camino distinto?
+
+El protocolo ICMP es un protocolo de red que se utiliza para comunicar problemas con la transmisión de datos en una red. Se utiliza para:
+* Informar errores de transmisión de datos.
+* Realizar diagnósticos de red.
+* Realizar pruebas de red.
+
+a) El comando *ping* es una herramienta de diagnóstico que permite hacer una verificación del estado de una determinada conexión (permite saber si una dirección IP específica es accesible o no desde la red).
+Básicamente envía un mensaje de solicitud y espera una respuesta, con esto mide el tiempo que tarda en viajar la solicitud y regresar la respuesta.
+Muestra el RTT mínimo, máximo, promedio y la desviación estándar, y también la pérdida de paquetes, con lo cual permite diagnosticar problemas de conectividad.
+    i) El comando ping envía un paquete ICMP tipo 8 (Echo Request) con código 0 (el cual especifica que es una solicitud estándar). Dicho paquete contiene un mensaje de solicitud echo.
+    ii) El host que recibió la solicitud responde con un paquete ICMP tipo 0 con código 0 (respuesta estándar sin código específico).
+
+b) Los comandos *traceroute* y *tracert* rastrean la ruta de un paquete IP ajustando el campo TTL del paquete (inician con un TTL bajo y lo van aumentando). Cada salto de red reduce el TTL y envía una respuesta ICMP.
+El comando registra las direcciones IP de los saltos intermedios, con lo cual podemos ver la ruta desde el oriigen hasta el destino. 
+
+c)![comando tracert -d www.nasa.gov](image-8.png)
+    i) Para que no se muestre el nombre del dominio asociado a la IP en cada salto, se le puede agregar la opción **-d** al comando tracert.
+    ii)El asterísico (*) indica que ese enrutador o dispositivo de red no respondió a la solicitud hecha. Puede ser también una medida de seguridad, configuración o simplemente es que el enrutador no responde a las solicitudes.
+d) ![comando tracert -d unlp.edu.ar](image-9.png)
+No se puede verificar el recorrido, debido a que todas las respuestan dan como resultado "Tiempo de espera agotado para esta solicitud"..
+
+---
 20. ¿Para que se usa el bloque 127.0.0.0/8? ¿Qué PC responde a los siguientes  comandos?
     a. ping 127.0.0.1
     b. ping 127.0.54.43
+
+El bloque 127.0.0.0/8 es un rango de direcciones IP reservadas para direcciones de loopback, también conocidas como direcciones locales o localhost. Se utiliza para permitir que un dispositivo pueda comunicarse consigo mismo, esto es útil para la prueba de aplicaciones y servicios de red sin necesidad de acceder a una red real.
+
+Ambos comandos *ping* recibibiran una respuesta de la propia computadora.
+
+---
 21. Investigue para qué sirven los comandos ifconfig y route. ¿Qué comandos podría utilizar en su reemplazo? Inicie una topología con CORE, cree una máquina y utilice en ella los comandos anteriores para practicar sus diferentes opciones, mínimamente:
     * Configurar y quitar una dirección IP en una interfaz.
     * Ver la tabla de ruteo de la máquina.
+
+El comando *ifconfig* se utiliza para configurar y visualizar información de interfaces de red en sistemas Linux. Se recomienda utilizar IP como alternativa para una funcionalidad más avanada.
+
+El comando *route* muestra y modifica la tabla de enrutamiento en sistemas Linux. En sistemas más recientes se puede utilizar *ip route* o *netstat -r* para ver la tabla de enrutamiento, e *ip route add* para agregar rutas e *ip route del* para eliminar rutas.
