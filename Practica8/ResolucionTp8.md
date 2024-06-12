@@ -151,8 +151,40 @@ Los dos routers van a seguir haciendo lo descripto anteriormente, hasta que el T
 
 d) Es posible realizar la sumarización en el caso de las redes 205.20.0.192/26 y 205.20.0.128/26, debido a que tienen el mismo salto, la misma máscara y la misma interfáz.
 
+En este caso los primeros 25 bits son iguales en ambas cadenas, con lo cual, la red resultante (sumarizada) será:
 
+| Dirección  | Mask| Next-Hop |iface |
+|:-----------|:----|:---------|:-----|
+| 205.20.0.1 | /25 | 10.0.0.5 | eth0 |
 
+11001101.00010100.00000000.11000000 => 205.20.0.192/26
+11001101.00010100.00000000.10000000 => 205.20.0.128/26
+
+11111111.11111111.11111111.11000000 => Mask /26
+
+Como tienen los primeros 25 bits iguales, lo que hacemos es restringir la máscara a /25.
+
+e) Debido a que ambas redes se encuentran interconectadas (conectadas por medio del mismo router) y que tienen distinta interfáz, no se puede aplicar la sumarización en el Rtr-B.
+
+f)
+
+|Red Destino | Mask | Next-Hop | iface |
+|:-----------|:-----|:---------|:------|
+|205.20.0.192 | /26 | - | eth0 |
+|205.20.0.128 | /36 | - | eth2 |
+|10.0.0.12 | /30 | - | eth3 |
+|10.0.0.4 | /30 | - | eth1 |
+|10.0.0.8 | /30 | 10.0.0.6 | eth1 |
+|10.0.0.16 |/30 | 10.0.0.13 | eth3 |
+|10.0.0.0| /30 | 10.0.0.13 | eth3 |
+|153.10.20.120 | /27 | 10.0.0.6 | eth1 |
+|163.10.5.64 | /27 | 10.0.0.6 | eth1 |
+|205.10.0.128 | /25 | 10.0.0.13 | eth3 |
+|120.0.0.0| /30 | 10.0.0.13 | eth3 |
+|130.0.10.0 | /30 | 10.0.0.13 | eth3 |
+|0.0.0.0 | /0 | 10.0.0.13 | eth3 |
+
+g) En caso de que eso pase, el acceso a internet podría ser reestablecido si los routers tienen en su tabla de ruteo la red ISP-1 (120.0.0.0/39), para la cual se debe pasar por Rtr-A.
 
 ---
 6. Evalúe para cada caso si el mensaje llegará a destino, saltos que tomará y tipo de respuesta recibida en el emisor.
@@ -161,6 +193,24 @@ d) Es posible realizar la sumarización en el caso de las redes 205.20.0.192/26 
 * Un mensaje ICMP enviado por PC-C a PC-B.
 * Un mensaje ICMP enviado por PC-C a 8.8.8.8.
 * Un mensaje ICMP enviado por PC-B a 8.8.8.8.
+
+a) **PC-B envía mensaje ICMP a PC-C**
+PC-B -> n7 -> router 2 -> 0.0.0.0 (salto)
+router 2 -> router 1 -> 10.0.0.0 (salto)
+router 1 -> router 3 -> 10.0.7.1 (salto)
+router 3 -> n6 -> PC-C
+
+Si o si para envíar el mensaje ICMP a la PC-C lo debe hacer por medio del router 1, esto se debe a que router 2 no tiene en la columna Gateway de su tabla la dirección de router 4. 
+Por lo tanto el mensaje pasa de PC-B a n7 y luego a router 2, en la tabla de router 2, podemos ver que conocer a router 1 dado que la dirección de destino 0.0.0.0 con gateway en 10.0.0.1, coincide con la dirección de router 1 (10.0.0.1). Una vez en router 1, podemos ver en su tabla que la dirección de destino 10.0.0.0 con gateway en 10.0.3.1, coincide con la dirección correspondiente al router 3, por lo tanto envía el mensaje hacia el router 3 y una vez ahí, el mensaje pasa por n6 y luego llega finalmente a PC-C.
+
+b) **PC-C envía mensaje ICMP a PC-B**
+PC-C -> n6 -> router 3
+router 3 -> router 4
+router 4 -> router 2
+router 2 -> n7 -> PC-B
+
+
+
 
 ## DHCP y NAT
 7. Con la máquina virtual con acceso a Internet realice las siguientes observaciones respecto de la autoconfiguración IP vía DHCP:
