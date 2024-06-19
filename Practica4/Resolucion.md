@@ -128,7 +128,8 @@ Es posible que un MSA escuche en un puerto TCP diferente, eso sí, se debe avisa
 Es posible, pero en caso de que se haga, se le debe avisar a todos los MTA del dominio del cambio de puerto, pero esto es prácticamente imposible.
 
 ---
-10. Ejercicio integrador HTTP, DNS y MAIL Suponga que registró bajo su propiedad el dominio redes2024.com.ar y dispone de 4 servidores:
+### Ejercicio integrador HTTP, DNS y MAIL 
+10. Suponga que registró bajo su propiedad el dominio redes2024.com.ar y dispone de 4 servidores:
     ● Un servidor DNS instalado configurado como primario de la zona redes2024.com.ar. (hostname: ns1 - IP: 203.0.113.65).
     ● Un servidor DNS instalado configurado como secundario de la zona redes2024.com.ar. (hostname: ns2 - IP: 203.0.113.66).
     ● Un servidor de correo electrónico (hostname: mail - IP: 203.0.113.111). Permitirá a los usuarios envíar y recibir correos a cualquier dominio de Internet.
