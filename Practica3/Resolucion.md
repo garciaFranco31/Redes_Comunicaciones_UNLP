@@ -28,7 +28,7 @@ Una *respuesta autoritativa* se produce cuando un *servidor autoritativo* recibe
 
 **Consulta recursiva:** es aquella donde el servidor DNS debe ponerse en contacto con otros servidores DNS (los que sean necesarios para resolver la solicitud)
 
-**Consulta iterativa:**es aquella en la que se espera que el servidor DNS responda con la información local que tiene almacenada de lo que conoce de la zona local o de la caché.
+**Consulta iterativa:** es aquella en la que se espera que el servidor DNS responda con la información local que tiene almacenada de lo que conoce de la zona local o de la caché.
 
 ---
 5. ¿Qué es el resolver?
@@ -38,13 +38,21 @@ El resolver es un agente encargado de resolver los nombres a solicitud del clien
 ---
 6. Describa para qué se utilizan los siguientes tipos de registros de DNS:
     a. **A (Address):** son registros que mapean de nombre de dominio a una dirección IP (IPv4). Pueden existir varios registros A con el mismo nombre:
+    
     b. **MX (Mail Exchanger):** indican para un nombre de dominio, cuáles son los servidores de mail encargados de recibir los mensajes para ese dominio.
+    
     c. **PTR (Pointer):** son registros que mapean direcciones IP a nombres de dominio (al contario que los registros A).
+    
     d. **AAAA:** igual que el registro A, es decir, se encargan de mapear el nombre de dominio a una dirección IP, pero en este caso, en su versión v6 (IPv6)
+    
     e. **SRV (Service):**un registro de servicio, especifica un servidor y un puerto para servicios específicos (ej. mensajería instantanea).
+    
     f. **NS (Name Server):** indican los servidores de nombre autoritativos para una zona o sub-domunio.
+    
     g. **CNAME (Canonical Name):** también conocidos como aliases, se encargan de mapear un nombre de dominio a otros nombres al nombre original (nombre canónico).
-    h. **SOA (Start of Authority):**se crean por cada zona o sub-zona que brinda el servicio de DNS, en ellos se especifican los parámetros globales para todos los registros del dominio o zona.
+
+    h. **SOA (Start of Authority):** se crean por cada zona o sub-zona que brinda el servicio de DNS, en ellos se especifican los parámetros globales para todos los registros del dominio o zona.
+
     i. **TXT (Textual):** mapena un nombre de dominio a información extra asociada con el equipo que tiene dicho nombre.
 
 ---
@@ -70,7 +78,7 @@ Suponga que se crea una nueva facultad, Facultad de Redes, cuyo dominio será re
     Delegación de dominios: es la configuración de DNS que debe asociarse a un nombre de dominio para relacionarlo con un servicio de hosting que almacenará la información del sitio web, correo electrónico, etc...
 ´´´
 
-se debe registrar el nombre de dominio *redes.unlp.edu.ar* (esto se hace mediante un registrador, el cual se encarga de verificar la unicidad del nombre de dominio). Una vez que se registra el nombre de dominio hay que proporcionarle los nombres y direcciones IP de sus servidores DNS autoritativos principal y secundarios. El registrador se asegura de que se introduzca un registro de tipo **NS (dns1.redes.unlp.edu.ar y dns2.redes.unlp.edu.ar)** y un registro de tipo A **(www.redes.unlp.edu.ar; dn1.redes.unlp.edu.ar, una_direccion_IP y dns2.redes.unlp.edu.ar, una_direccion_IP2)** en los servidores TLD *.ar*. Y también agregar un registro de tipo **MX (mail.redes.unlp.edu.ar)** para definir el servidor de correo donde se recibirán los mensajes.
+se debe registrar el nombre de dominio *redes.unlp.edu.ar* (esto se hace mediante un registrador, el cual se encarga de verificar la unicidad del nombre de dominio). Una vez que se registra el nombre de dominio hay que proporcionarle los nombres y direcciones IP de sus servidores DNS autoritativos principal y secundarios. El registrador se asegura de que se introduzca un registro de tipo **NS (dns1.redes.unlp.edu.ar y dns2.redes.unlp.edu.ar)** y un registro de tipo A **(www.redes.unlp.edu.ar; dns1.redes.unlp.edu.ar, una_direccion_IP y dns2.redes.unlp.edu.ar, una_direccion_IP2)** en los servidores TLD *.ar*. Y también agregar un registro de tipo **MX (mail.redes.unlp.edu.ar)** para definir el servidor de correo donde se recibirán los mensajes.
 
 
 ## DNS
@@ -81,7 +89,9 @@ se debe registrar el nombre de dominio *redes.unlp.edu.ar* (esto se hace mediant
         ii. ¿Puede indicar si se trata de una respuesta autoritativa? ¿Qué significa que lo sea?
         iii. ¿Cuál es la dirección IP del resolver utilizado? ¿Cómo lo sabe?
 
-    en caso de que se tenga activado el flag rd, pero no el ra, esto quiere decir que la consulta fue recursiva, pero la respuesta fue iterativa.
+    ```
+        En caso de que se tenga activado el flag rd, pero no el ra, esto quiere decir que la consulta fue recursiva, pero la respuesta fue iterativa. El flag rd activado indica que se admiten respuestas recursivas. En caso de que no se muestre el flag ra, entonces la consuta fue recursiva pero la respuesta fue iterativa (aunque haya tenido la recursiòn habilitada).
+    ```
     
     i. Debido a que se encuentra activado el flag **rd** podemos decir que la consulta es recursiva y como además está activado el flag **ra**, la respuesta a la consulta también es recursiva.
     ii. Debido a que viene activado el flag **aa**, se puede decir que la respuesta es autoritativa.
@@ -111,9 +121,11 @@ se debe registrar el nombre de dominio *redes.unlp.edu.ar* (esto se hace mediant
     ---
     e. Observe la información que obtuvo al consultar por los servidores de DNS del dominio. En base a la salida, ¿es posible indicar cuál de ellos es el primario?
 
-    No es posible indicar cuál de los dos es el servidor primerio, para poder saber cuál es el servidor primario, se debe hacer una consulta al registro SOA de la siguiente forma:
+    No es posible indicar cuál de los dos es el servidor primario, para poder saber cuál es el servidor primario, se debe hacer una consulta al registro SOA de la siguiente forma:
     ´´´
         dig -t soa redes.unlp.edu.ar
+
+        Con esto podemos ver que cuando queremos hacer que un servidor NS sea primario, tenemos que asinarlo tambièn en el registro SOA.
     ´´´
     
     ---

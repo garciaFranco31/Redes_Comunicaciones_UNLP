@@ -82,10 +82,10 @@ En los encabezados debería enviarse la información del host al que se le está
 
 CURL es una herramienta de línea de comandos que permite transferir datos desde o hacia un servidor sin interacción del usuario.
 
-**-I:**Permite obtener información del encabezado de un sitio web. En caso de que se use en FTP solamente muestra el tamaño del archivo y la fecha de la última modificación.
-**-H:**Permite incluir cualquier cantidad de encabezados extra en una solicitud HTTP.
-**-X:**Especifica un método de solicitud personalizado cuando queremos comunicarnos con un servidor HTTP. Esto quiere decir que en vez de usar el default (GET) podemos indicarle que queremos comunicarnos con el servidor HTTP usando el método POST por ejemplo.
-**-s:**Es como un modo silencioso, no muestra el progreso de la comunicación ni tampoco los mensjes de error, pero sí muestra la iformación que fue solicitada.
+**-I:** Permite obtener información del encabezado de un sitio web. En caso de que se use en FTP solamente muestra el tamaño del archivo y la fecha de la última modificación.
+**-H:** Permite incluir cualquier cantidad de encabezados extra en una solicitud HTTP.
+**-X:** Especifica un método de solicitud personalizado cuando queremos comunicarnos con un servidor HTTP. Esto quiere decir que en vez de usar el default (GET) podemos indicarle que queremos comunicarnos con el servidor HTTP usando el método POST por ejemplo.
+**-s:** Es como un modo silencioso, no muestra el progreso de la comunicación ni tampoco los mensjes de error, pero sí muestra la iformación que fue solicitada.
 
 ---
 8. Ejecute el comando curl sin ningún parámetro adicional y acceda a www.redes.unlp.edu.ar. Luego responda:
