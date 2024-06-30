@@ -176,9 +176,39 @@ Por último debemos agregar el prefijo 2900:AABB:: y los agrupo de a 16 bits:
 ![tabla de rutas ejercicio 7](/Parciales-20240616/Parcial_1ra_2022/imgs/image-2.png)
 ![tabla ejercicio 7](/Parciales-20240616/Parcial_1ra_2022/imgs/image-3.png)
 
+Paquete 1 -> Se hace una operacion AND entre la direccion IP_destino y la GenMask -> 140.23.0.0 -> podemos ver que dicha direccion IP no se encuentra en la tabla de rutas, por lo tanto sales por la default por medio de la interfaz eth0. MAC_192_168_0_255.
+
+Paquete 2 -> 
+    Se hace una operacion AND entre la direccion IP_destino y su mascara, el resultado es 172.21.0.0. Podemos ver que dicha direccion IP existe en la tabla, por lo tanto sale por la interfaz eth2. Direccion MAC_192.168.2.255
+
+Paquete 3 ->
+    Se hace una operacion AND entre la direccion IP_destino (192.168.2.29) y su mascara (255.255.255.0 por ser de clase C), esto da como resultado la direccion 192.168.2.0. Como dicha direccion existe en la tabla, vemos que sale por la interfaz eth2. Direccion MAC_0.0.0.0.
+
+
 ---
 8. Considerando la siguiente topología y luego de que pc-A hace un ping exitoso a pc-C:
     ![topologia ejercicio 8](/Parciales-20240616/Parcial_1ra_2022/imgs/image-4.png)
-    a. Complete la información del ARP request que realiza pe-A. Incluya la información de los protocolos  ethernet y ARP.
+    a. Complete la información del ARP request que realiza pc-A. Incluya la información de los protocolos  ethernet y ARP.
+
+    ```
+        PC-A como no conoce la dirección MAC de PC-C, lo que hace primero es armar el paquete IP y lo encapsula en una trama de ethernet, en el cual la dirección MAC de destino es la de broadcast, en dicha ARP Request se pregunta por la dirección IP 10.0.2.20 (dirección de PC-C). El broadcast envía este request a todas las PCs que posee conectadas.
+        Una vez que todas las PCs reciben el request, PC-B descarta el mensaje sileciosamente, ya que no tiene la dirección IP que se solicita y por el contrario PC-C responde al request de forma unicast envíando su dirección MAC 
+    ```
+
     b. Indique cómo quedan las tablas CAM de los dispositivos que están en el mismo segmento de broadcast que pc-A.
-    c. Si en pc-B hubiesen estado capturando tráfico en la interfaz eth0, ¿que hubiesen escuchado? Para cada paquete capturado, indique el protocolo y si se trata de un requerimiento o una respuesta. 
+
+    | Switch | MAC | Interfaz |
+    |:-------|:----|:---------|
+    | sw-1   |MAC_10.0.0.20 | e0 |
+    | router | MAC_10.0.0.1 | e2 |
+
+    | Switch | MAC | Interfaz |
+    |:-------|:----|:---------|
+    | sw-2   | MAC_10.0.0.20 | e1 |
+
+    c. Si en pc-B hubiesen estado capturando tráfico en la interfaz eth0, ¿que hubiesen escuchado? Para cada paquete capturado, indique el protocolo y si se trata de un requerimiento o una respuesta.
+
+    ```
+        Lo que PC-B hubiera escuchado es el ARP Request, donde PC-A solicita la dirección MAC de PC-C, ya que dicho request fue un broadcast.
+        Lo que hubiera visto es un paquete IP con el protocolo ICMP del tipo Echo Request de PC-A hacía PC-C.
+    ```
